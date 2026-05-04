@@ -67,9 +67,6 @@
     "C /root/.claude/settings.json 0600 root root - ${claudeSettingsJson}"
   ];
 
-  # The .claude directory is persisted to allow `claude --resume` and changes
-  # to settings across Clank invocations. This means that the settings.json is
-  # only copied the first time.
   # https://code.claude.com/docs/en/claude-directory#application-data
   fileSystems."/root/.claude" = {
     device = "/persist/root/.claude";

@@ -17,9 +17,13 @@
           };
         };
       };
+      server = {
+        hostname = "0.0.0.0";
+        port = 4096;
+      };
     });
   in [
-    "C /root/.config/opencode/opencode.json 0600 root root - ${opencodeJson}"
+    "L+ /root/.config/opencode/opencode.json - - - - ${opencodeJson}"
   ];
 
   fileSystems."/root/.config/opencode" = {

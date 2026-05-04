@@ -41,6 +41,8 @@ def main(tmp: Path) -> None:
         # Mount a volume shared amongst all Clank instances to /persist. Bind
         # mounts are defined in the NixOS configuration.
         "--volume=clank-persist:/persist",
+        # Export `opencode web`. We only support a single instance for now.
+        "--publish=127.0.0.1:4096:4096"
     ]
 
     home = Path.home()
