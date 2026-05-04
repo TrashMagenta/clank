@@ -33,15 +33,8 @@
         # Run extra arguments if given on the command line, otherwise just
         # spawn an interactive fish shell.
         if test -s /command.sh
-          source /command.sh
-        else
-          fish
+          exec sh /command.sh
         end
-        # "Power off" and stop the container when the shell exits -- otherwise
-        # you will be stuck in an auto-login loop on CTRL-D. We double --force,
-        # so we don't have to wait for anything to cleanly shut down, since
-        # this is an ephemeral container anyway.
-        exec systemctl poweroff --force --force
       '';
   };
 
@@ -54,6 +47,15 @@
     };
   };
   services.getty.autologinUser = "root";
+
+  # Exit the container when the shell exits -- otherwise you will be stuck in
+  # an auto-login loop on CTRL-D.
+  systemd.services."console-getty" = {
+    unitConfig = {
+      SuccessAction = "poweroff-immediate";
+      FailureAction = "poweroff-immediate";
+    };
+  };
 
   programs.vim = {
     enable = true;
