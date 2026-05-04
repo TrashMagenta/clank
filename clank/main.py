@@ -1,4 +1,5 @@
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -8,6 +9,9 @@ from uuid import uuid4
 # Passed by buildPythonApplication's makeWrapperArgs in flake.nix
 CLANK_EMPTY_DIRECTORY = os.environ["CLANK_EMPTY_DIRECTORY"]
 CLANK_ROOT = os.environ["CLANK_ROOT"]
+
+# Passed by the user
+CLANK_PODMAN_OPTS = os.getenv("CLANK_PODMAN_OPTS", default="")
 
 
 def cli() -> None:
@@ -41,8 +45,8 @@ def main(tmp: Path) -> None:
         # Mount a volume shared amongst all Clank instances to /persist. Bind
         # mounts are defined in the NixOS configuration.
         "--volume=clank-persist:/persist",
-        # Export `opencode web`. We only support a single instance for now.
-        "--publish=127.0.0.1:4096:4096"
+        # Allow callers to configure Podman
+        *shlex.split(CLANK_PODMAN_OPTS),
     ]
 
     home = Path.home()
@@ -72,7 +76,7 @@ def main(tmp: Path) -> None:
     # have to do it in this roundabout way because the command argument to
     # `podman run` has to be systemd (/init).
     command_sh = tmp.joinpath("command.sh")
-    command_sh.write_text(" ".join(sys.argv[1:]))
+    command_sh.write_text(shlex.join(sys.argv[1:]))
     command += [
         f"--volume={command_sh}:/command.sh:ro",
     ]

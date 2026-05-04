@@ -8,7 +8,9 @@
 > allowed to use it and fork it, but we may not be able to help you if you
 > don't work at Magenta.
 
-We would like feedback from your experience with using clank, please write your complaints in [this hedgedoc](https://hedgedoc.magenta.dk/-BdNEa-KQ0C2hfocolAA4g?both).
+We would like feedback from your experience with using Clank, please write your
+complaints in [this
+hedgedoc](https://hedgedoc.magenta.dk/-BdNEa-KQ0C2hfocolAA4g?both).
 
 ## ⚡ Quick Start
 
@@ -73,14 +75,15 @@ alias clank='nix run github:magenta-aps/clank --'
 
 ### 👼 Open Code
 
-See the [OpenCode documentation](https://opencode.ai/docs/providers) for a list of providers.
+See the [OpenCode documentation](https://opencode.ai/docs/providers) for a list
+of providers.
 
-- Scaleway: run `opencode` and then `/connect` to `Scaleway`. The API key [is
-  here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
-  We recommend the `Qwen3.5 397B A17B` model.
 - Gemini: run `opencode` and then `/connect` to `Google`. The API key [is
   here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
   We recommend the `Gemini 3.1 Pro Preview` model.
+- Scaleway: run `opencode` and then `/connect` to `Scaleway`. The API key [is
+  here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
+  We don't recommend any of these models, as they're all kinda bad.
 
 ### 😈 Claude Code
 
@@ -95,6 +98,14 @@ sessions. In this case, run `claude setup-token` and add the resulting token to
 
 ```sh
 export CLAUDE_CODE_OAUTH_TOKEN='<your-access-token-here>'
+```
+
+## 💡 Tips and Tricks
+
+### OpenCode Web
+
+```sh
+CLANK_PODMAN_OPTS='--publish=127.0.0.1:4096:4096' clank opencode web --hostname=0.0.0.0 --port=4096
 ```
 
 ## 🧑‍🔧 Development
