@@ -14,17 +14,6 @@
 
   networking.hostName = "clank";
 
-  systemd.mounts = [
-    {
-      where = "/sys/kernel/debug";
-      enable = false;
-    }
-    {
-      where = "/sys/kernel/tracing";
-      enable = false;
-    }
-  ];
-
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   system.stateVersion = lib.trivial.release; # No need to read any comments!
