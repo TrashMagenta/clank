@@ -20,11 +20,6 @@
     "L+ /root/.config/opencode/opencode.json - - - - ${opencodeJson}"
   ];
 
-  fileSystems."/root/.config/opencode" = {
-    device = "/persist/root/.config/opencode";
-    fsType = "none";
-    options = ["bind"];
-  };
   fileSystems."/root/.local/share/opencode" = {
     device = "/persist/root/.local/share/opencode";
     fsType = "none";
