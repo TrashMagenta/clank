@@ -20,20 +20,10 @@
     }))
   ];
 
-  environment.variables = {
-    # Allow bypassPermissions as root
-    # https://github.com/anthropics/claude-code/issues/3490
-    IS_SANDBOX = "1";
-    # DISABLE_AUTOUPDATER, DISABLE_BUG_COMMAND,
-    # DISABLE_ERROR_REPORTING and DISABLE_TELEMETRY.
-    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
-  };
-
+  # https://code.claude.com/docs/en/settings
   systemd.tmpfiles.rules = let
-    # https://code.claude.com/docs/en/settings#global-config-settings
     claudeJson = pkgs.writeText "claude.json" (builtins.toJSON {
-      bypassPermissionsModeAccepted = true; # yolo
-      # Claude Code asks us to log in during onboarding. We want to use
+      # Claude Code asks us to log in during onboarding. We may want to use
       # CLAUDE_CODE_OAUTH_TOKEN instead.
       hasCompletedOnboarding = true;
       # Always trust the mounted host volume
@@ -42,26 +32,30 @@
           hasTrustDialogAccepted = true;
         };
       };
-      theme = "dark";
     });
-    # https://code.claude.com/docs/en/settings
-    claudeSettingsJson = pkgs.writeText "claude-settings.json" (builtins.toJSON {
+    settingsJson = pkgs.writeText "settings.json" (builtins.toJSON {
       # Disable commercials in git commits
       attribution = {
         commit = "";
         pr = "";
       };
-      # Default to the best model
-      model = "claude-opus-4-7";
-      # yolo
-      permissions = {
-        defaultMode = "bypassPermissions";
-        skipDangerousModePermissionPrompt = true;
+      env = {
+        # Allow bypassPermissions as root
+        # https://github.com/anthropics/claude-code/issues/3490
+        IS_SANDBOX = "1";
+        # DISABLE_AUTOUPDATER, DISABLE_BUG_COMMAND,
+        # DISABLE_ERROR_REPORTING and DISABLE_TELEMETRY.
+        CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
       };
+      # Default to the best model
+      model = "opus";
+      # yolo
+      permissions.defaultMode = "bypassPermissions";
+      skipDangerousModePermissionPrompt = true;
     });
   in [
     "C /root/.claude.json 0600 root root - ${claudeJson}"
-    "C /root/.claude/settings.json 0600 root root - ${claudeSettingsJson}"
+    "C /root/.claude/settings.json 0600 root root - ${settingsJson}"
   ];
 
   # https://code.claude.com/docs/en/claude-directory#application-data
