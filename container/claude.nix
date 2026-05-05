@@ -27,9 +27,6 @@
     # DISABLE_AUTOUPDATER, DISABLE_BUG_COMMAND,
     # DISABLE_ERROR_REPORTING and DISABLE_TELEMETRY.
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
-    # Don't use memory since we're in an ephemeral container.
-    # https://code.claude.com/docs/en/memory
-    CLAUDE_CODE_DISABLE_AUTO_MEMORY = "1";
   };
 
   systemd.tmpfiles.rules = let
