@@ -1,8 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = [
-    pkgs.fzf
     pkgs.opencode
-    pkgs.ripgrep
   ];
 
   # https://opencode.ai/docs/config
