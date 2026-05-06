@@ -24,6 +24,15 @@
     }))
   ];
 
+  environment.variables = {
+    # Allow bypassPermissions as root
+    # https://github.com/anthropics/claude-code/issues/3490
+    IS_SANDBOX = "1";
+    # DISABLE_AUTOUPDATER, DISABLE_BUG_COMMAND,
+    # DISABLE_ERROR_REPORTING and DISABLE_TELEMETRY.
+    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
+  };
+
   # https://code.claude.com/docs/en/settings
   systemd.tmpfiles.rules = let
     claudeJson = pkgs.writeText "claude.json" (builtins.toJSON {
@@ -42,14 +51,6 @@
       attribution = {
         commit = "";
         pr = "";
-      };
-      env = {
-        # Allow bypassPermissions as root
-        # https://github.com/anthropics/claude-code/issues/3490
-        IS_SANDBOX = "1";
-        # DISABLE_AUTOUPDATER, DISABLE_BUG_COMMAND,
-        # DISABLE_ERROR_REPORTING and DISABLE_TELEMETRY.
-        CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
       };
       # Default to the best model
       model = "opus";
