@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  vars,
+  ...
+}: {
   environment.systemPackages = [
     pkgs.opencode
   ];
@@ -17,6 +21,7 @@
       };
     });
   in [
+    "L+ /root/.config/opencode/AGENTS.md - - - - ${vars.AGENTS_md}"
     "L+ /root/.config/opencode/opencode.json - - - - ${opencodeJson}"
   ];
 

@@ -5,6 +5,7 @@
     ./opencode.nix
     ./podman.nix
     ./shell.nix
+    ./vars.nix
   ];
 
   # Disable unneeded services
