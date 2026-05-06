@@ -34,6 +34,18 @@
   };
 
   # https://code.claude.com/docs/en/settings
+  environment.etc."claude-code/managed-settings.json".text = builtins.toJSON {
+    # Disable commercials in git commits
+    attribution = {
+      commit = "";
+      pr = "";
+    };
+    # Default to the best model
+    model = "opus";
+    # yolo
+    permissions.defaultMode = "bypassPermissions";
+    skipDangerousModePermissionPrompt = true;
+  };
   systemd.tmpfiles.rules = let
     claudeJson = pkgs.writeText "claude.json" (builtins.toJSON {
       # Claude Code asks us to log in during onboarding. We may want to use
@@ -46,21 +58,8 @@
         };
       };
     });
-    managedSettingsJson = pkgs.writeText "managed-settings.json" (builtins.toJSON {
-      # Disable commercials in git commits
-      attribution = {
-        commit = "";
-        pr = "";
-      };
-      # Default to the best model
-      model = "opus";
-      # yolo
-      permissions.defaultMode = "bypassPermissions";
-      skipDangerousModePermissionPrompt = true;
-    });
   in [
     "C /root/.claude.json 0600 root root - ${claudeJson}"
-    "L+ /etc/claude-code/managed-settings.json - - - - ${managedSettingsJson}"
     # We must use AGENTS.md, rather than CLAUDE.md, since we patched the binary
     "L+ /root/.claude/AGENTS.md - - - - ${vars.AGENTS_md}"
   ];
