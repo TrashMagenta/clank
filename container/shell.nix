@@ -68,4 +68,10 @@
     fsType = "none";
     options = ["bind"];
   };
+  # Persist e.g. pre-commit and poetry cache
+  fileSystems."/root/.cache" = {
+    device = "/persist/root/.cache";
+    fsType = "none";
+    options = ["bind"];
+  };
 }
