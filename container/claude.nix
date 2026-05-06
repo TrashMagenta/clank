@@ -46,7 +46,7 @@
         };
       };
     });
-    managedSettingsJson = pkgs.writeText "managed-settings.json" (builtins.toJSON {
+    settingsJson = pkgs.writeText "settings.json" (builtins.toJSON {
       # Disable commercials in git commits
       attribution = {
         commit = "";
@@ -60,7 +60,7 @@
     });
   in [
     "C /root/.claude.json 0600 root root - ${claudeJson}"
-    "L+ /etc/claude-code/managed-settings.json - - - - ${managedSettingsJson}"
+    "C /root/.claude/settings.json 0600 root root - ${settingsJson}"
     # We must use AGENTS.md, rather than CLAUDE.md, since we patched the binary
     "L+ /root/.claude/AGENTS.md - - - - ${vars.AGENTS_md}"
   ];
