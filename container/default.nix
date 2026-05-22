@@ -2,6 +2,7 @@
   imports = [
     ./claude.nix
     ./hardware.nix
+    ./nix.nix
     ./opencode.nix
     ./podman.nix
     ./shell.nix
@@ -14,8 +15,6 @@
   systemd.oomd.enable = false;
 
   networking.hostName = "clank";
-
-  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   system.stateVersion = lib.trivial.release; # No need to read any comments!
 }
