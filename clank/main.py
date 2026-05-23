@@ -37,8 +37,10 @@ def main(tmp: Path) -> None:
         "--volume=/proc/sys:/proc/sys:rw",
         # Do not create /etc/hostname in the container
         "--no-hostname",
-        # Mount current working directory into the container
-        "--volume=./:/root/host:rw",
+        # Mount the current working directory at the same absolute path inside
+        # the container, so absolute paths (e.g. in mounted Python virtual
+        # environments) work.
+        f"--volume=./:{Path.cwd()}:rw",
         # Root is tmpfs, but some things need to be on disk, or we will quickly
         # run out of ram. Bind mounts are defined in the NixOS configuration.
         "--volume=/disk",
@@ -68,17 +70,17 @@ def main(tmp: Path) -> None:
     # use it to run arbitrary commands on startup.
     if home.joinpath(".config/clank.sh").exists():
         command += [
-            f"--volume={home}/.config/clank.sh:/root/.config/clank.sh:ro",
+            f"--volume={home}/.config/clank.sh:/clank/clank.sh:ro",
         ]
 
     # Whatever extra arguments were given on the command line are run in the
     # container, e.g. `clank opencode --model=scaleway/qwen3.5-397b-a17b`. We
     # have to do it in this roundabout way because the command argument to
     # `podman run` has to be systemd (/init).
-    command_sh = tmp.joinpath("command.sh")
-    command_sh.write_text(shlex.join(sys.argv[1:]))
+    tmp.joinpath("command").write_text(shlex.join(sys.argv[1:]))
+    tmp.joinpath("cwd").write_text(str(Path.cwd()))
     command += [
-        f"--volume={command_sh}:/command.sh:ro",
+        f"--volume={tmp}:/clank:ro",
     ]
 
     command += [

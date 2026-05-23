@@ -39,12 +39,6 @@
       # Claude Code asks us to log in during onboarding. We may want to use
       # CLAUDE_CODE_OAUTH_TOKEN instead.
       hasCompletedOnboarding = true;
-      # Always trust the mounted host volume
-      projects = {
-        "/root/host" = {
-          hasTrustDialogAccepted = true;
-        };
-      };
     });
     settingsJson = pkgs.writeText "settings.json" (builtins.toJSON {
       # Disable commercials in git commits
@@ -59,7 +53,10 @@
       skipDangerousModePermissionPrompt = true;
     });
   in [
-    "C /root/.claude.json 0600 root root - ${claudeJson}"
+    # It's annoying to bind mount a single file, so we symlink
+    # /root/.claude.json to the persisted directory.
+    "L+ /root/.claude.json - - - - /root/.claude/claude.json"
+    "C /root/.claude/claude.json 0600 root root - ${claudeJson}"
     "C /root/.claude/settings.json 0600 root root - ${settingsJson}"
     # We must use AGENTS.md, rather than CLAUDE.md, since we patched the binary
     "L+ /root/.claude/AGENTS.md - - - - ${vars.AGENTS_md}"

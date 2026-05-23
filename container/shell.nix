@@ -25,15 +25,17 @@
       # fish
       ''
         # Load environment variables mounted from the host's ~/.config/clank.sh
-        if test -s ~/.config/clank.sh
-          source ~/.config/clank.sh
+        if test -s /clank/clank.sh
+          source /clank/clank.sh
         end
-        # Enter the mounted host/ directory
-        cd host/
-        # Run extra arguments if given on the command line, otherwise just
-        # spawn an interactive fish shell.
-        if test -s /command.sh
-          exec sh /command.sh
+        # Enter the mounted host directory
+        cd (cat /clank/cwd)
+        # Run command if given as extra arguments on the command line.
+        # Terminals spawned in OpenCode Web also run as login shells, so we use
+        # a marker to avoid running the command in those.
+        if test -s /clank/command; and not test -e /run/clank-avoid-recursion
+          touch /run/clank-avoid-recursion
+          exec sh /clank/command
         end
       '';
   };
