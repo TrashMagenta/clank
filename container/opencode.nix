@@ -19,6 +19,9 @@
           };
         };
       };
+      # By default, OpenCode isn't allowed to read .env files, and has to ask
+      # permission to do anything outside the working directory.
+      permission = "allow";
     });
   in [
     "L+ /root/.config/opencode/AGENTS.md - - - - ${vars.AGENTS_md}"
