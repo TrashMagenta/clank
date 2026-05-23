@@ -7,6 +7,12 @@
     pkgs.opencode
   ];
 
+  environment.variables = {
+    # Enable Exa web search tools
+    # https://opencode.ai/docs/tools/#websearch
+    OPENCODE_ENABLE_EXA = "1";
+  };
+
   # https://opencode.ai/docs/config
   systemd.tmpfiles.rules = let
     opencodeJson = pkgs.writeText "opencode.json" (builtins.toJSON {
