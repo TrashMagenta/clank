@@ -78,11 +78,14 @@ alias clank='nix run github:magenta-aps/clank --'
 See the [OpenCode documentation](https://opencode.ai/docs/providers) for a list
 of providers.
 
-- Gemini: run `opencode` and then `/connect` to `Google`. The API key [is
+- **Mistral**: run `opencode` and then `/connect` to `Mistral`. Generate an API
+  key [here](https://console.mistral.ai/codestral/cli).
+  We recommend the `Devstral 2` model.
+- **Gemini**: run `opencode` and then `/connect` to `Google`. The API key [is
   here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
   We recommend the `Gemini 3.1 Pro Preview` model.
-- Scaleway: run `opencode` and then `/connect` to `Scaleway`. The API key [is
-  here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
+- **Scaleway**: run `opencode` and then `/connect` to `Scaleway`. The API key
+  [is here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
   We don't recommend any of these models, as they're all kinda bad.
 
 ### 😈 Claude Code
