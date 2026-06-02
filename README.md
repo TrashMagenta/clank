@@ -2,16 +2,6 @@
 
 `clank` is an AI sandbox, pre-configured to quickly start using AI.
 
-> [!NOTE]
-> This tool is designed for internal use at
-> [Magenta](https://github.com/magenta-aps/). It is open source, so you're
-> allowed to use it and fork it, but we may not be able to help you if you
-> don't work at Magenta.
-
-We would like feedback from your experience with using Clank, please write your
-complaints in [this
-hedgedoc](https://hedgedoc.magenta.dk/-BdNEa-KQ0C2hfocolAA4g?both).
-
 ## ⚡ Quick Start
 
 ### ❄️ Get Nix
@@ -78,15 +68,16 @@ alias clank='nix run github:magenta-aps/clank --'
 See the [OpenCode documentation](https://opencode.ai/docs/providers) for a list
 of providers.
 
-- **Mistral**: run `opencode` and then `/connect` to `Mistral`. Generate an API
-  key [here](https://console.mistral.ai/codestral/cli).
-  We recommend the `Devstral 2` model.
 - **Gemini**: run `opencode` and then `/connect` to `Google`. The API key [is
-  here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
-  We recommend the `Gemini 3.1 Pro Preview` model.
+  here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310)
+  if you work at Magenta. We recommend the `Gemini 3.1 Pro Preview` model.
+- **Mistral**: run `opencode` and then `/connect` to `Mistral`. Generate an API
+  key [here](https://console.mistral.ai/codestral/cli). We recommend the
+  `Devstral 2` model.
 - **Scaleway**: run `opencode` and then `/connect` to `Scaleway`. The API key
-  [is here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310).
-  We don't recommend any of these models, as they're all kinda bad.
+  [is here](https://vault.bitwarden.com/#/vault?itemId=c9b60efc-e0b3-4a7a-a3d7-b43500d29310)
+  if you work at Magenta. We don't recommend any of these models, as they're
+  all kinda bad, but `qwen3.5-397b-a17b` is probably the best that they offer.
 
 ### 😈 Claude Code
 
