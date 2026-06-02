@@ -62,6 +62,22 @@
     "L+ /root/.claude/AGENTS.md - - - - ${vars.AGENTS_md}"
   ];
 
+  # Automatically trust the mounted directory
+  systemd.services.claude-auto-trust = {
+    wantedBy = ["multi-user.target"];
+    after = ["systemd-tmpfiles-setup.service"];
+    before = ["console-getty.service"];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      ${pkgs.yq-go}/bin/yq \
+        --inplace \
+        --input-format=json \
+        --output-format=json \
+        '.projects[loadstr("/clank/cwd")].hasTrustDialogAccepted = true' \
+        /root/.claude.json
+    '';
+  };
+
   # https://code.claude.com/docs/en/claude-directory#application-data
   fileSystems."/root/.claude" = {
     device = "/persist/root/.claude";
