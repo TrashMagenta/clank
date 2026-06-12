@@ -94,6 +94,57 @@ sessions. In this case, run `claude setup-token` and add the resulting token to
 export CLAUDE_CODE_OAUTH_TOKEN='<your-access-token-here>'
 ```
 
+## 🔐 Proxy Sidecar
+
+Clank can boot a second NixOS container in the same podman pod as the
+sandbox: the **proxy sidecar**. It holds your git.magenta.dk credentials and
+runs two proxies as systemd services, so the AI can do *authenticated*
+operations by routing through them, while the credentials themselves never
+exist inside the sandbox. Pod members share only the network namespace: the
+AI reaches the proxies at `http://localhost:<port>`, but cannot read the
+sidecar's environment variables, files or processes.
+
+- [cred-sidecar](https://github.com/TrashMagenta/cred-sidecar) (port 8080):
+  a credential-injecting forward proxy. Point any tool at it with
+  `HTTPS_PROXY` and it swaps in the real GitLab token at the network edge.
+- [git-proxy-ai](https://github.com/TrashMagenta/git-proxy-ai) (port 8000):
+  a git push gateway that only forwards pushes to `ai/*` branches on
+  allow-listed repositories.
+
+Put the credentials in `~/.config/clank/proxy.env` (an EnvironmentFile; it
+is mounted into the sidecar only, never into the sandbox):
+
+```sh
+# Enables the cred-sidecar proxy (a GitLab personal access token):
+GITLAB_TOKEN=glpat-...
+# Enables the git push gateway (write_repository scope on the allow-listed repos):
+UPSTREAM_GIT_TOKEN=glpat-...
+```
+
+A proxy whose token is missing is simply skipped, so you can configure one,
+the other, or both. Then start clank with the sidecar:
+
+```sh
+CLANK_PROXY=1 clank
+```
+
+Inside the sandbox, the AI sees `$CLANK_CRED_PROXY`, `$CLANK_CRED_PROXY_CA`
+and `$CLANK_GIT_PROXY` and opts in per command:
+
+```sh
+HTTPS_PROXY=$CLANK_CRED_PROXY SSL_CERT_FILE=$CLANK_CRED_PROXY_CA GITLAB_TOKEN=dummy glab api projects
+git push $CLANK_GIT_PROXY/git.magenta.dk/my-group/my-repo.git ai/my-feature
+```
+
+A direct (proxy-bypassing) call to git.magenta.dk still works, it just gets
+`401` because the sandbox has no credentials. Note that in pod mode,
+`CLANK_PODMAN_OPTS=--publish=...` does not work (network flags have to go on
+the pod itself); use `CLANK_POD_OPTS=--publish=...` instead. The git push
+gateway's repository allow-list is baked into the
+[git-proxy-ai](https://github.com/TrashMagenta/git-proxy-ai) flake's default
+`proxy.config.json`; override `services.git-proxy-ai.settings` in
+`proxy-sidecar/proxies.nix` to change it.
+
 ## 💡 Tips and Tricks
 
 ### OpenCode Web

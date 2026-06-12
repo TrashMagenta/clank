@@ -28,6 +28,11 @@
         if test -s /clank/clank.sh
           source /clank/clank.sh
         end
+        # Load the proxy sidecar's addresses, written by the host CLI when
+        # CLANK_PROXY is set (see clank/main.py)
+        if test -s /clank/proxy.sh
+          source /clank/proxy.sh
+        end
         # Enter the mounted host directory
         cd (cat /clank/cwd)
         # Run command if given as extra arguments on the command line.
